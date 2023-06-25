@@ -52,9 +52,8 @@ app.get("/movies/", async (request, response) => {
 });
 //Creates a new movie in the movie table. `movie_id` is auto-incremented
 app.post("/movies/", async (request, response) => {
-  const movieDetails = request.body;
-  const { directorId, movieName, leadActor } = movieDetails;
-  const addMovieQuery = `
+  const { directorId, movieName, leadActor } = request.body;
+  const postMovieQuery = `
      INSERT INTO 
      movie (director_id,movie_name,lead_actor)
      VALUES
@@ -62,7 +61,7 @@ app.post("/movies/", async (request, response) => {
          ${directorId}
          '${movieName}'
          '${leadActor}');`;
-  await db.run(addMovieQuery);
+  await db.run(postMovieQuery);
   response.send("Movie Successfully Added");
 });
 
@@ -114,10 +113,10 @@ app.get("/directors/:directorId/movies/", async (request, response) => {
   const getDirectorMovieQuery = `select movie_name from  movie  
     
     where director_id='${directorId}'; `;
-  const movies = await db.all(getDirectorMovieQuery);
+  const movieArray = await db.all(getDirectorMovieQuery);
 
   response.send(
-    movies.map((eachMovie) => ({ movieName: eachMovie.movie_name }))
+    movieArray.map((eachMovie) => ({ movieName: eachMovie.movie_name }))
   );
 });
 module.exports = app;
