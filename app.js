@@ -41,13 +41,18 @@ const convertDirectorDbObjectToResponseObject = (dbObject) => {
     directorId: dbObject.director_id,
   };
 };
+const convertMovieNameToPascalCase = (dbObject) => {
+  return {
+    movieName: dbObject.movie_name,
+  };
+};
 //Returns a list of all movie names in the movie table
 app.get("/movies/", async (request, response) => {
   const getAllMovieQuery = `SELECT  movie_name FROM movie;`;
   const movieArray = await db.all(getAllMovieQuery);
 
   response.send(
-    movieArray.map((eachMovie) => ({ movieName: eachMovie.movie_name }))
+    movieArray.map((eachMovie) => convertMovieNameToPascalCase(eachMovie))
   );
 });
 //Creates a new movie in the movie table. `movie_id` is auto-incremented
@@ -115,7 +120,7 @@ app.get("/directors/:directorId/movies/", async (request, response) => {
   const movieArray = await db.all(getDirectorMovieQuery);
 
   response.send(
-    movieArray.map((eachMovie) => ({ movieName: eachMovie.movie_name }))
+    movieArray.map((eachMovie) => convertMovieNameToPascalCase(eachMovie))
   );
 });
 module.exports = app;
