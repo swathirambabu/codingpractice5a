@@ -48,11 +48,11 @@ const convertMovieNameToPascalCase = (dbObject) => {
 };
 //Returns a list of all movie names in the movie table
 app.get("/movies/", async (request, response) => {
-  const getAllMovieQuery = `SELECT  movie_name FROM movie;`;
-  const movieArray = await db.all(getAllMovieQuery);
+  const getAllMovieQuery = `SELECT movie_name FROM movie;`;
+  const moviesArray = await db.all(getAllMovieQuery);
 
   response.send(
-    movieArray.map((eachMovie) => convertMovieNameToPascalCase(eachMovie))
+    moviesArray.map((eachMovie) => convertMovieNameToPascalCase(eachMovie))
   );
 });
 //Creates a new movie in the movie table. `movie_id` is auto-incremented
