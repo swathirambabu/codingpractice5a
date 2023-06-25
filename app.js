@@ -10,21 +10,22 @@ const dbPath = path.join(__dirname, "moviesData.db");
 let db = null;
 
 const initializeDBAndServer = async () => {
-    try {
-        db = await open({
-            filename: dbPath,
-            driver: sqlite3.Database,
-        });
-        app.listen(3000, () => {
-            console.log("Server Running at http://localhost:3000/")
-        );
-    } catch (e) {
-        console.log(`DB Error: ${e.message}`);
-        process.exit(1);
-    }
+  try {
+    db = await open({
+      filename: dbPath,
+      driver: sqlite3.Database,
+    });
+    app.listen(3000, () => {
+      console.log("Server Running at http://localhost:3000/");
+    });
+  } catch (e) {
+    console.log(`DB Error: ${e.message}`);
+    process.exit(1);
+  }
 };
 
 initializeDBAndServer();
+   
 
 const convertMovieDbObjectToResponseObject = (dbObject) => {
     return {
