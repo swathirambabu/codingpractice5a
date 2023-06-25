@@ -1,8 +1,8 @@
 const express = require("express");
-const path = require("path");
 
 const { open } = require("sqlite");
 const sqlite3 = require("sqlite3");
+const path = require("path");
 const app = express();
 app.use(express.json());
 
@@ -68,6 +68,7 @@ app.post("/movies/", async (request, response) => {
 //Returns a movie based on the movie ID
 app.get("/movies/:movieId/", async (request, response) => {
   const { movieId } = request.params;
+
   const getMovieQuery = `SELECT * FROM movie WHERE movie_id=${movieId};`;
   const movie = await db.get(getMovieQuery);
 
@@ -76,8 +77,7 @@ app.get("/movies/:movieId/", async (request, response) => {
 //Updates the details of a movie in the movie table based on the movie ID
 app.put("/movies/:movieId/", async (request, response) => {
   const { movieId } = request.params;
-  const movieDetails = request.body;
-  const { directorId, movieName, leadActor } = movieDetails;
+  const { directorId, movieName, leadActor } = request.body;
   const updateMovieQuery = `UPDATE movie SET 
       director_id=${directorId},
       movie_name='${movieName}',
@@ -101,8 +101,8 @@ app.get("/directors/", async (request, response) => {
 
   const directorsArray = await db.all(getAllDirectorQuery);
   response.send(
-    directorsArray.map((director) =>
-      convertDirectorDbObjectToResponseObject(director)
+    directorsArray.map((eachDirector) =>
+      convertDirectorDbObjectToResponseObject(eachDirector)
     )
   );
 });
@@ -110,8 +110,7 @@ app.get("/directors/", async (request, response) => {
 app.get("/directors/:directorId/movies/", async (request, response) => {
   const { directorId } = request.params;
 
-  const getDirectorMovieQuery = `select movie_name from  movie  
-    
+  const getDirectorMovieQuery = `select movie_name from  movie    
     where director_id='${directorId}'; `;
   const movieArray = await db.all(getDirectorMovieQuery);
 
